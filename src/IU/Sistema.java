@@ -9,14 +9,13 @@ import Negocio.Constantes.Sexo;
 import Negocio.Constantes.Plano;
 import Negocio.Constantes.Especialidade;
 import Negocio.Execoes.ExcecoesConsulta.ConsultaJaExisteException;
+import Negocio.Execoes.ExcecoesConsulta.ConsultaNaoExisteException;
 import Negocio.Execoes.ExcecoesPessoa.PessoaNaoExisteException;
 import Negocio.NegocioConsultas;
 import Negocio.NegocioPaciente;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
@@ -35,10 +34,13 @@ public class Sistema {
             System.out.println("4. Listar Pacientes");
             System.out.println("5. Listar Médicos");
             System.out.println("6. Buscar Consulta");
-            System.out.println("7. Sair");
+            System.out.println("7. Cancelar Consulta");
+            System.out.println("8. Remarcar Consulta");
+            System.out.println("9. Sair");
 
             System.out.print("Escolha uma opção: ");
             int opcao = scanner.nextInt();
+            scanner.nextLine(); // Consome a linha restante
 
             switch (opcao) {
                 case 1 -> cadastrarPaciente(scanner);
@@ -47,7 +49,9 @@ public class Sistema {
                 case 4 -> listarPacientes();
                 case 5 -> listarMedicos();
                 case 6 -> buscarConsulta(scanner);
-                case 7 -> {
+                case 7 -> cancelarConsulta(scanner);
+                case 8 -> remarcarConsulta(scanner);
+                case 9 -> {
                     System.out.println("Saindo...");
                     System.exit(0);
                 }
@@ -62,20 +66,15 @@ public class Sistema {
 
     private static void cadastrarPaciente(Scanner scanner) {
         System.out.print("Nome: ");
-        String nome = scanner.next();
-        scanner.nextLine();
+        String nome = scanner.nextLine();
         System.out.print("CPF: ");
-        String cpf = scanner.next();
-        scanner.nextLine();
+        String cpf = scanner.nextLine();
         System.out.print("Data de Nascimento (YYYY-MM-DD): ");
-        String dataNascimento = scanner.next();
-        scanner.nextLine();
+        String dataNascimento = scanner.nextLine();
         System.out.print("Sexo (MASCULINO/FEMININO): ");
-        Sexo sexo = Sexo.valueOf(scanner.next().toUpperCase());
-        scanner.nextLine();
+        Sexo sexo = Sexo.valueOf(scanner.nextLine().toUpperCase());
         System.out.print("Plano (SUS/PRATA/GOLD): ");
-        Plano plano = Plano.valueOf(scanner.next().toUpperCase());
-        scanner.nextLine();
+        Plano plano = Plano.valueOf(scanner.nextLine().toUpperCase());
 
         Paciente paciente = new Paciente(nome, cpf, dataNascimento, sexo, plano);
         try {
@@ -88,23 +87,17 @@ public class Sistema {
 
     private static void cadastrarMedico(Scanner scanner) {
         System.out.print("Nome: ");
-        String nome = scanner.next();
-        scanner.nextLine();
+        String nome = scanner.nextLine();
         System.out.print("CPF: ");
-        String cpf = scanner.next();
-        scanner.nextLine();
+        String cpf = scanner.nextLine();
         System.out.print("Data de Nascimento (YYYY-MM-DD): ");
-        String dataNascimento = scanner.next();
-        scanner.nextLine();
+        String dataNascimento = scanner.nextLine();
         System.out.print("Sexo (MASCULINO/FEMININO): ");
-        Sexo sexo = Sexo.valueOf(scanner.next().toUpperCase());
-        scanner.nextLine();
+        Sexo sexo = Sexo.valueOf(scanner.nextLine().toUpperCase());
         System.out.print("CRM: ");
-        String crm = scanner.next();
-        scanner.nextLine();
+        String crm = scanner.nextLine();
         System.out.print("Especialidade: ");
-        Especialidade especialidade = Especialidade.valueOf(scanner.next().toUpperCase());
-        scanner.nextLine();
+        Especialidade especialidade = Especialidade.valueOf(scanner.nextLine().toUpperCase());
 
         Medico medico = new Medico(nome, cpf, dataNascimento, sexo, crm, especialidade);
         try {
@@ -122,7 +115,6 @@ public class Sistema {
             // Receber dados do médico
             System.out.print("CPF do Médico: ");
             String cpfMedico = scanner.nextLine();
-            scanner.nextLine();
 
             System.out.print("CPF do Paciente: ");
             String cpfPaciente = scanner.nextLine();
@@ -156,8 +148,6 @@ public class Sistema {
         }
     }
 
-
-
     private static void listarPacientes() {
         fachada.listarPacientes().forEach(System.out::println);
     }
@@ -167,6 +157,59 @@ public class Sistema {
     }
 
     private static void buscarConsulta(Scanner scanner) {
+        try {
+            System.out.print("Informe id da consulta: ");
+            String id = scanner.nextLine();
+            System.out.print("Informe a data da consulta (yyyy-mm-dd): ");
+            String dataConsulta = scanner.nextLine();
+            System.out.print("Informe a hora da consulta (HH:mm): ");
+            String horaConsulta = scanner.nextLine();
 
+            Consulta consulta = fachada.buscarConsulta(id, LocalDate.parse(dataConsulta), LocalTime.parse(horaConsulta));
+            System.out.println(consulta);
+        } catch (ConsultaNaoExisteException e) {
+            System.out.println("Consulta não encontrada: " + e.getMessage());
+        } catch (DateTimeParseException e) {
+            System.out.println("Erro ao converter data ou hora.");
+        }
+    }
+
+    private static void cancelarConsulta(Scanner scanner) {
+        try {
+            System.out.print("Informe o ID da consulta para cancelar: ");
+            String idConsulta = scanner.nextLine();
+            System.out.print("Informe a data da consulta (yyyy-mm-dd): ");
+            String dataConsulta = scanner.nextLine();
+            System.out.print("Informe a hora da consulta (HH:mm): ");
+            String horaConsulta = scanner.nextLine();
+
+            fachada.cancelarConsulta(idConsulta, LocalDate.parse(dataConsulta), LocalTime.parse(horaConsulta));
+            System.out.println("Consulta cancelada com sucesso!");
+        } catch (ConsultaNaoExisteException e) {
+            System.out.println("Consulta não encontrada: " + e.getMessage());
+        }
+    }
+
+    private static void remarcarConsulta(Scanner scanner) {
+        try {
+            System.out.print("Informe o ID da consulta para remarcar: ");
+            String idConsulta = scanner.nextLine();
+            System.out.print("Informe a data original da consulta (yyyy-mm-dd): ");
+            String dataConsulta = scanner.nextLine();
+            System.out.print("Informe a hora original da consulta (HH:mm): ");
+            String horaConsulta = scanner.nextLine();
+
+            System.out.print("Informe a nova data (yyyy-mm-dd): ");
+            String novaData = scanner.nextLine();
+            System.out.print("Informe a nova hora (HH:mm): ");
+            String novaHora = scanner.nextLine();
+
+            fachada.remarcarConsulta(idConsulta, LocalDate.parse(dataConsulta), LocalTime.parse(horaConsulta),
+                    LocalDate.parse(novaData), LocalTime.parse(novaHora));
+
+            System.out.println("Consulta remarcada com sucesso!");
+        } catch (ConsultaNaoExisteException | ConsultaJaExisteException e) {
+            System.out.println("Erro ao remarcar consulta: " + e.getMessage());
+        }
     }
 }

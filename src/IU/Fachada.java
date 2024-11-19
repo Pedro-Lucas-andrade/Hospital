@@ -75,7 +75,10 @@ public class Fachada {
         return negocioConsultas.buscarConsulta(id, data, hora);
     }
 
-    public void cancelarConsulta(String id, LocalDate data, LocalTime hora) throws ConsultaNaoExisteException {
+    public void remarcarConsulta(String id, LocalDate data, LocalTime hora, LocalDate novaData, LocalTime novaHora) throws ConsultaNaoExisteException, IllegalArgumentException, ConsultaJaExisteException {
+        remarcarConsulta(id, data, hora, novaData, novaHora);
+    }
+        public void cancelarConsulta(String id, LocalDate data, LocalTime hora) throws ConsultaNaoExisteException {
         negocioConsultas.cancelarConsulta(id, data, hora);
     }
 
