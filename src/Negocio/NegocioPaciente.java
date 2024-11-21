@@ -16,7 +16,7 @@ public class NegocioPaciente {
 
     public boolean buscar(String cpf) throws IllegalArgumentException{
         if (!Utilitaria.validarCpf(cpf)) {
-            throw new IllegalArgumentException("O CPF digitado é inválido!"); // CPF inválido
+            throw new IllegalArgumentException("O CPF digitado é inválido!");
         }
         return repositorioPaciente.buscar(cpf);
     }
@@ -37,31 +37,31 @@ public class NegocioPaciente {
 
     public boolean atualizar(String cpf, String nome) throws IllegalArgumentException, PessoaNaoExisteException {
         if (!Utilitaria.validarCpf(cpf)) {
-            throw new IllegalArgumentException("O CPF digitado é inválido!"); // CPF inválido
+            throw new IllegalArgumentException("O CPF digitado é inválido!");
         }
         if (!repositorioPaciente.buscar(cpf)) {
-            throw new PessoaNaoExisteException(cpf); // Pessoa não encontrada
+            throw new PessoaNaoExisteException(cpf);
         }
         return repositorioPaciente.atualizar(cpf, nome);
     }
 
     public boolean remover(String cpf) throws IllegalArgumentException, PessoaNaoExisteException{
         if (!Utilitaria.validarCpf(cpf)) {
-            throw new IllegalArgumentException("O CPF é inválido!"); // CPF inválido
+            throw new IllegalArgumentException("O CPF é inválido!");
         }
         PessoaAbstrata pessoa = retornaPessoa(cpf);
         if (pessoa == null) {
-            throw new PessoaNaoExisteException(cpf); // Pessoa não encontrada
+            throw new PessoaNaoExisteException(cpf);
         }
         return repositorioPaciente.remover(pessoa);
     }
 
     public PessoaAbstrata retornaPessoa(String cpf) throws IllegalArgumentException, PessoaNaoExisteException{
         if (!Utilitaria.validarCpf(cpf)) {
-            throw new IllegalArgumentException("O CPF é inválido!"); // CPF inválido
+            throw new IllegalArgumentException("O CPF é inválido!");
         }
-        PessoaAbstrata pessoa = repositorioPaciente.retornaPessoa(cpf); // Chama diretamente o repositório
-        if (pessoa == null) {// Verifica a existência antes de continuar
+        PessoaAbstrata pessoa = repositorioPaciente.retornaPessoa(cpf);
+        if (pessoa == null) {
             throw new PessoaNaoExisteException(cpf);
         }
 

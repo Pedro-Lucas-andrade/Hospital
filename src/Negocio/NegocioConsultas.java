@@ -27,7 +27,6 @@ public class NegocioConsultas {
 
         LocalTime hora = consulta.getHora();
 
-        // Verificar se a hora está dentro do intervalo permitido
         if (hora.getHour() < 8 || hora.getHour() >= 16) {
             throw new IllegalArgumentException("Horário inválido! Escolha um horário entre 8h e 15h.");
         }

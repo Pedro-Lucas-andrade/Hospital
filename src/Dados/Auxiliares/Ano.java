@@ -2,8 +2,8 @@ package Dados.Auxiliares;
 
 public class Ano {
     private int ano;
-    private Mes[] arrayMeses = new Mes[12];
-    private int[] diasMeses = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    private Mes[] arrayMeses = new Mes[12]; // Array dos meses do ano
+    private int[] diasMeses = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // array de dias que cada mês possui
 
     public Ano(int ano) {
         this.ano = ano;

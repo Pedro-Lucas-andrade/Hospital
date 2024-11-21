@@ -9,8 +9,6 @@ public class Paciente extends PessoaAbstrata {
     public Paciente(String nome, String cpf, String dataDeNascimento, Sexo sexo, Plano plano) {
         super(nome, cpf, dataDeNascimento, sexo);
         this.plano = plano;
-        /*this.historico = new ArrayList<>();
-        this.examesMarcados = new ArrayList<>();*/
     }
 
     public Plano getPlano() {

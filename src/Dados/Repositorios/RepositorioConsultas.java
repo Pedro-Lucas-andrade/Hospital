@@ -66,9 +66,8 @@ public class RepositorioConsultas implements IRepositorioConsultas {
 
         Mes mes = meses[mesDaConsulta];
 
-        // Verificação de limites
        ListadeConsultas lista = mes.getDiaPorHora()[horaDaConsulta][diaDaConsulta];
-       lista.getConsultas().remove(consulta); // Remover a consulta específica
+       lista.getConsultas().remove(consulta);
     }
 
     public Consulta remarcar(String id, LocalDate data, LocalTime hora, LocalDate novaData, LocalTime novaHora) throws ConsultaNaoExisteException, IllegalStateException{
@@ -91,13 +90,12 @@ public class RepositorioConsultas implements IRepositorioConsultas {
 
 
     public List<Consulta> buscarPorDataHora(LocalDate data, LocalTime hora) {
-        int mesDaConsulta = data.getMonthValue() - 1; // Ajusta para índice de array (0 a 11)
-        int diaDaConsulta = data.getDayOfMonth() - 1; // Ajuste para índice (0 a 30/29)
+        int mesDaConsulta = data.getMonthValue() - 1;
+        int diaDaConsulta = data.getDayOfMonth() - 1;
         int horaDaConsulta = hora.getHour() - 8;
 
         Mes mes = meses[mesDaConsulta];
 
-        // Verificação de limites
         if (horaDaConsulta >= 8 && horaDaConsulta < 16 && diaDaConsulta >= 0 && diaDaConsulta < mes.getDias()) {
             ListadeConsultas lista = mes.getDiaPorHora()[horaDaConsulta][diaDaConsulta];
             return new ArrayList<>(lista.getConsultas());

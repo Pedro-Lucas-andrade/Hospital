@@ -27,13 +27,10 @@ public class Mes {
         return hora >= 0 && hora < horas && dia >= 0 && dia < dias;
     }
 
-
-    // Método para obter a matriz de listas de consultas
     public ListadeConsultas[][] getDiaPorHora() {
         return diaPorHora;
     }
 
-    // Getters para dias e horas
     public int getDias() {
         return dias;
     }
